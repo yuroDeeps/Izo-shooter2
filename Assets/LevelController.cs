@@ -2,46 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class LevelController : MonoBehaviour
-{
 
-    public GameObject zombie;
-    public int MaxZombieCount;
+{
+    
+    private int maxZombies = 3;
+    private int maxHeal = 1;
+    public GameObject ZombiePrefab;
+    public GameObject HealPrefab;
     // Start is called before the first frame update
     void Start()
     {
-        
+      
     }
 
     // Update is called once per frame
     void Update()
     {
-        SpawnZombie();
-    }
-
-    private void SpawnZombie ()
-    {
-        var currentZombieCount = GameObject.FindGameObjectsWithTag("Enemy");
-
-        if (currentZombieCount.Count() < MaxZombieCount)
+       var zombies = GameObject.FindGameObjectsWithTag("Enemy");
+        var heals = GameObject.FindGameObjectsWithTag("Heal");
+        if (zombies.Count() < maxZombies)
         {
-            var position = GetRandomPosition();
-
-            if (Physics.CheckSphere(position, 2))
-            {
-                Instantiate(zombie, position, Quaternion.identity);
-            }
+            SpawnZombie();
         }
+        if (heals.Count() < maxHeal)
+        {
+            SpawnHeal();
+        }
+       
     }
-
-    private Vector3 GetRandomPosition()
+    void SpawnZombie()
     {
-        var x = Random.Range(-10f, 10f);
-        var z = Random.Range(-10f, 10f);
-        var position = new Vector3(x, 0f, z);
-
-        return position;
+        Vector3 spawnPosition = Random.insideUnitSphere * Random.Range(10, 20);
+        spawnPosition.y = 1;
+        if (Physics.CheckSphere(spawnPosition, 0.9f))
+        {
+            spawnPosition = Random.insideUnitSphere * Random.Range(10, 20);
+            spawnPosition.y = 0;
+        }
+        GameObject newZombie = Instantiate(ZombiePrefab, spawnPosition, Quaternion.identity);
+        
     }
+
+    void SpawnHeal()
+    {
+        Vector3 spawnPosition = Random.insideUnitSphere * Random.Range(10, 20);
+        spawnPosition.y = 1;
+        if (Physics.CheckSphere(spawnPosition, 0.9f))
+        {
+            spawnPosition = Random.insideUnitSphere * Random.Range(10, 20);
+            spawnPosition.y = 0;
+        }
+        GameObject newHeal = Instantiate(HealPrefab, spawnPosition, Quaternion.identity);
+    }
+
 }

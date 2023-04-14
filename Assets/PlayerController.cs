@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviour
             hpScrollBar.size = hp / 10;
             Vector3 pushVector = collision.gameObject.transform.position - transform.position;
             collision.gameObject.GetComponent<Rigidbody>().AddForce(pushVector.normalized*5, ForceMode.Impulse);
+        } else if (collision.gameObject.CompareTag("Heal"))
+        {
+            hp = 10;
+            hpScrollBar.size = hp / 10;
+            Destroy(collision.gameObject);
         }
     }
     void Die()
@@ -67,5 +72,10 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.right * -90);
         
         //Time.timeScale = 0;
+    }
+
+    public void Heal()
+    {
+        hp = 10;
     }
 }
