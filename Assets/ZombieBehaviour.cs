@@ -19,32 +19,44 @@ public class ZombieBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(hp> 0)
+        bool seesPlayer = false;
+        bool hearsPlayer = false;
+        RaycastHit hit;
+        Vector3 playerVector = player.transform.position - transform.position;
+        Debug.DrawRay(transform.position, playerVector, Color.yellow);
+        if(Physics.Raycast(transform.position, playerVector, out hit))
         {
-            transform.LookAt(player.transform.position);
-            //Vector3 playerDirection = transform.position - player.transform.position;
+            Debug.Log("Widzê: " + hit.transform.name);
+        }
 
-            //transform.Translate(Vector3.forward * Time.deltaTime);
-            agent.destination= player.transform.position;
+        if (hit.collider.gameObject.CompareTag("Player"))
+        {
+            seesPlayer= true;
+        } 
+
+        //s³uch
+        Collider[] nearby = Physics.OverlapSphere(transform.position, 5f);
+        foreach(Collider collider in nearby)
+        {
+            if (collider.transform.CompareTag("Player"))
+            {
+                hearsPlayer= true;
+            }
+        }
+
+        if(seesPlayer || hearsPlayer)
+        {
+            
+          agent.destination = player.transform.position;
+          agent.isStopped = false;
+            
+        } else
+        {
+            agent.isStopped = true;
         }
         
     }
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if(collision.gameObject.CompareTag("Bullet"))
-    //    {
-    //        Destroy(collision.gameObject);
-    //        hp--;
-    //        if(hp <= 0)
-    //        {
-    //            transform.Translate(Vector3.up);
-    //            transform.Rotate(Vector3.right * -90);
-    //            transform.GetComponent<BoxCollider>().enabled = false;
-    //            transform.gameObject.tag = "Untagged";
-    //            Destroy(transform.gameObject, 10);
-    //        }
-    //    }
-    //}
+ 
 
     public void ReciveDamage(int dmg)
     {
