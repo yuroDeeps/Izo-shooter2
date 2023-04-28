@@ -10,15 +10,22 @@ public class ZombieBehaviour : MonoBehaviour
     GameObject player;
     NavMeshAgent agent;
     // Start is called before the first frame update
+
+    public static bool startTime = false;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
+        Time.timeScale = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (startTime)
+        {
+            Time.timeScale = 1;
+        }
         bool seesPlayer = false;
         bool hearsPlayer = false;
         RaycastHit hit;

@@ -7,14 +7,14 @@ public class LevelController : MonoBehaviour
 
 {
     
-    private int maxZombies = 3;
+    private int maxZombies = 9;
     private int maxHeal = 1;
     public GameObject ZombiePrefab;
     public GameObject HealPrefab;
     // Start is called before the first frame update
     void Start()
     {
-      
+        Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -57,4 +57,13 @@ public class LevelController : MonoBehaviour
         GameObject newHeal = Instantiate(HealPrefab, spawnPosition, Quaternion.identity);
     }
 
+    public void startGame()
+    {
+        Time.timeScale = 1.0f;
+        PlayerController.startTime = true;
+        ZombieBehaviour.startTime = true;
+        BulletController.startTime = true;
+        var mainMenu = GameObject.FindGameObjectWithTag("MainMenu");
+        mainMenu.SetActive(false);
+    }
 }
